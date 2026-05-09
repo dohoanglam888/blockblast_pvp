@@ -1,13 +1,21 @@
 import { useEffect, useState } from 'react'
+
 import Board from './components/Board'
 import ShapeTray from './components/ShapeTray'
+
 import { loginGuest } from './firebase/auth'
 import { createProfile } from './backend/createProfile'
 import { findMatch } from './backend/findMatch'
+
 import { useGameStore } from './store/gameStore'
 
 export default function App() {
-  const { board, score, shapes } = useGameStore()
+  const {
+    board,
+    score,
+    shapes,
+    gameOver,
+  } = useGameStore()
 
   const [uid, setUid] = useState('')
   const [roomId, setRoomId] = useState('')
@@ -15,6 +23,7 @@ export default function App() {
   useEffect(() => {
     async function boot() {
       const result = await loginGuest()
+
       const user = result.user
 
       setUid(user.uid)
@@ -38,6 +47,12 @@ export default function App() {
       <div className="text-xl">
         Score: {score}
       </div>
+
+      {gameOver && (
+        <div className="text-red-500 text-2xl font-bold">
+          GAME OVER
+        </div>
+      )}
 
       <Board board={board} />
 
