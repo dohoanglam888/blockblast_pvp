@@ -4,14 +4,23 @@ export default function ShapeTray({ shapes }) {
       {shapes.map((shape, idx) => (
         <div
           key={idx}
-          draggable
-          onDragStart={e => {
+          draggable={true}
+          onDragStart={(e) => {
+            e.dataTransfer.effectAllowed = 'move'
+
             e.dataTransfer.setData(
-              'shapeIndex',
-              idx
+              'text/plain',
+              idx.toString()
             )
           }}
-          className="bg-slate-900 p-3 rounded-xl cursor-grab active:scale-95"
+          className="
+            bg-slate-900
+            p-3
+            rounded-xl
+            cursor-grab
+            active:scale-95
+            select-none
+          "
         >
           {shape.map((row, y) => (
             <div key={y} className="flex gap-1">
