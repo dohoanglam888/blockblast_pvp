@@ -19,8 +19,6 @@ export const useGameStore = create((set, get) => ({
 
   score: 0,
 
-  gameOver: false,
-
   shapes: [
     randomShape(),
     randomShape(),
@@ -32,24 +30,31 @@ export const useGameStore = create((set, get) => ({
 
     const shape = state.shapes[shapeIndex]
 
-    if (!canPlace(state.board, shape, row, col)) {
-      return
-    }
+    if (!shape) return
 
-    const board = placeShape(
+    const valid = canPlace(
       state.board,
       shape,
       row,
       col
     )
 
-    const shapes = [...state.shapes]
+    if (!valid) return
 
-    shapes[shapeIndex] = randomShape()
+    const newBoard = placeShape(
+      state.board,
+      shape,
+      row,
+      col
+    )
+
+    const newShapes = [...state.shapes]
+
+    newShapes[shapeIndex] = randomShape()
 
     set({
-      board,
-      shapes,
+      board: newBoard,
+      shapes: newShapes,
       score: state.score + 100,
     })
   },
